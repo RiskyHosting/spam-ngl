@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spam NGL Risky</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+<body class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen">
+
+  <header class="bg-gray-800 shadow-md sticky top-0">
+    <div class="container mx-auto p-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-purple-400">SPAM NGL RISKY DINATA</h1>
+    </div>
+  </header>
+
+  <main class="container mx-auto mt-10">
+    <div class="text-center">
+      <h2 class="text-3xl font-extrabold mb-4" data-aos="fade-up">Spam Pesan Anonim</h2>
+      <p class="text-gray-400 mb-6" data-aos="fade-right">
+        Jangan Jual Beliin Tools Tod<br>By Risky Ganteng.<br>
+        <a href="https://t.me/angellhostingg" class="text-purple-400 underline">https://t.me/angellhostingg</a>
+      </p>
+    </div>
+
+    <form id="spamForm" class="p-6 bg-gray-800 rounded-lg shadow-lg" data-aos="zoom-in">
+      <div class="mb-4">
+        <label for="username" class="block text-lg font-medium">NGL Username</label>
+        <input type="text" id="username" placeholder="Contoh: risky123"
+          class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700 text-white" required>
+      </div>
+      <div class="mb-4">
+        <label for="message" class="block text-lg font-medium">Pesan Anonim</label>
+        <textarea id="message" placeholder="Tulis pesan Anda..."
+          class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700 text-white" rows="4" required></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="count" class="block text-lg font-medium">Jumlah Pesan</label>
+        <input type="number" id="count" placeholder="Contoh: 5"
+          class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-700 text-white" min="1" required>
+      </div>
+      <button type="submit" class="w-full bg-purple-600 py-2 rounded-lg hover:bg-purple-700 transition" data-aos="flip-up">
+        Kirim Pesan
+      </button>
+    </form>
+  </main>
+
+  <footer class="text-center mt-10 text-gray-500">
+    <p class="text-sm">&copy; 2025 Spam NGL Powered by Risky Dinata</p>
+  </footer>
+
+  <script>
+    AOS.init();
+
+    document.getElementById("spamForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const count = parseInt(document.getElementById("count").value, 10);
+
+      if (!username || !message || isNaN(count) || count < 1) {
+        Swal.fire("Oops!", "Harap isi semua kolom dengan benar.", "error");
+        return;
+      }
+
+      Swal.fire({
+        title: "Tunggu sebentar!",
+        text: `Mengirim ${count} pesan...`,
+        icon: "info",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+      });
+
+      let berhasil = 0;
+      let gagal = 0;
+
+      const sendSpam = async () => {
+        for (let i = 0; i < count; i++) {
+          try {
+            const apiURL = `https://api.siputzx.my.id/api/tools/ngl?link=${encodeURIComponent("https://ngl.link/" + username)}&text=${encodeURIComponent(message)}`;
+            const res = await fetch(apiURL);
+            const text = await res.text();
+            let data = {};
+
+            try {
+              data = JSON.parse(text);
+            } catch (err) {
+              // text mentah kalau gagal parse JSON
+              data.raw = text;
+            }
+
+            if (
+              data.success === true ||
+              (typeof data.message === "string" && data.message.toLowerCase().includes("success")) ||
+              data.status === true ||
+              text.toLowerCase().includes("success")
+            ) {
+              berhasil++;
+            } else {
+              gagal++;
+            }
+
+          } catch (err) {
+            gagal++;
+          }
+        }
+
+        Swal.fire({
+          title: "Hasil Spam",
+          html: `<p>✅ Terkirim: ${berhasil}</p><p>❌ Gagal: ${gagal}</p>`,
+          icon: "success",
+        });
+      };
+
+      // Panggil async function
+      sendSpam();
+    });
+  </script>
+</body>
+</html>
